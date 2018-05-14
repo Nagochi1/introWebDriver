@@ -1,11 +1,15 @@
 package classExercise;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+
 
 public class FacebookAddFriend {
 
@@ -13,38 +17,29 @@ public class FacebookAddFriend {
 
 	public static void main(String[] args) { 
 
-		//configurarNavegador 
-
-		configurarNavegador(); 
-
-		//login 
-
-		logearFacebook("clase.selenium.victor@gmail.com", "Test1234"); 
-
-		//buscar 
-
-		buscarAmigo("nombreAmigo"); 
-
-		//agregar 
-
-		agregarAmigo("nombreAmigo"); 
 		
+		configurarNavegador(); //configurarNavegador 
+		logearFacebook("luarball@hotmail.com", "Gonzalez"); //login 
+		buscarAmigo("Carol Rojo"); //buscar amigo
+		agregarAmigo("Carol Rojo", "Carolina Rojo"); //agregar amigo
 		destruirConfiguracion();
 
 	} 
 
 
 	private static void destruirConfiguracion() {
-		driver.close();
+		//driver.close();
 		
 	}
 
 
 	private static void configurarNavegador() {  
 
-		//System.setProperty("webdriver.chrome.driver", "C:\\test_automation\\drivers\\chromedriver.exe"); 
-		driver = new ChromeDriver(); 
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS); 
+		System.setProperty("webdriver.chrome.driver", "C:\\test_automation\\drivers\\chromedriver.exe");
+		ChromeOptions ops = new ChromeOptions();
+        ops.addArguments("--disable-notifications");
+        driver = new ChromeDriver(ops);
+ 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS); 
 		driver.get("http://www.facebook.com"); 
 
 	} 
@@ -65,13 +60,41 @@ public class FacebookAddFriend {
 		botonLogin.click();
 	} 
 
-	private static void agregarAmigo(String string) {
+	private static void agregarAmigo(String nameFriend, String infoFriend) {
+		String xpath = "//div[ contains(@class, '_2yer _401d _2xje _2nuh')]";
+		WebElement correctContainer = null;
+		
+		List <WebElement> containerList = driver.findElements(By.xpath(xpath));
+		
+		for (int i = 0; i < containerList.size(); i++) {
+			WebElement currentElement = containerList.get(i);
+						
+			if(currentElement.getText().contains("infoFriend")) {
+				correctContainer = currentElement;
+				break;
+			}
+		}
+		
+		if(correctContainer != null) {
+			WebElement addFriendLink = correctContainer.findElement(By.xpath(".//button[@aria-label='Agregar a amigos']"));
+			addFriendLink.click();
+			//if(addFriendLink.getText().contains("")) {
+					
+			//	}
+			}
+			//System.out.println(currentElement.getText());
+	
 		
 
 	}
 
-	private static void buscarAmigo(String string) {
-
+	private static void buscarAmigo(String nameFriend) {
+		WebElement searchTxt= driver.findElement(By.name("q"));
+		searchTxt.clear();
+		searchTxt.sendKeys(nameFriend);
+		WebElement searchButton = driver.findElement(By.xpath("//button[@data-testid='facebar_search_button']"));
+		searchButton.click();
+	
 	}
 
 

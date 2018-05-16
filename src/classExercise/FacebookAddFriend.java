@@ -61,7 +61,7 @@ public class FacebookAddFriend {
 	} 
 
 	private static void agregarAmigo(String nameFriend, String infoFriend) {
-		String xpath = "//div[ contains(@class, '_2yer _401d _2xje _2nuh')]";
+		String xpath = "//div[ contains(@class,'_2yer')]";
 		WebElement correctContainer = null;
 		
 		List <WebElement> containerList = driver.findElements(By.xpath(xpath));
@@ -69,7 +69,7 @@ public class FacebookAddFriend {
 		for (int i = 0; i < containerList.size(); i++) {
 			WebElement currentElement = containerList.get(i);
 						
-			if(currentElement.getText().contains("infoFriend")) {
+			if(currentElement.getText().contains(infoFriend)) {
 				correctContainer = currentElement;
 				break;
 			}
